@@ -6,15 +6,14 @@ import java.io.IOException;
 public class Contact {
     public String name;
     public String imageUri;
-    public File profilePic;
 
-    Contact(String name, String photoTitle) {
+
+    Contact() {
+
+    }
+
+    Contact(String name, String imageUri) {
         this.name = name;
-        this.imageUri = "images/" + photoTitle + ".jpg";
-        try {
-            profilePic = File.createTempFile(photoTitle, "jpg");
-        } catch (IOException exc) {
-
-        }
+        this.imageUri = imageUri;
     }
 }

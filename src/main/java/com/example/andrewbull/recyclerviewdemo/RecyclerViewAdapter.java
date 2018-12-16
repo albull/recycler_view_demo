@@ -55,28 +55,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        final File localFile = contacts.get(i).profilePic;
-        StorageReference dogPicRef = mStorageRef.child(contacts.get(i).imageUri);
-        dogPicRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.fromFile(localFile));
-                            viewHolder.imageView.setImageBitmap(bitmap);
-                        } catch (IOException exc) {
 
+
+        try {
+            final File localFile = File.createTempFile("images", "jpg");
+            StorageReference dogPicRef = mStorageRef.child(contacts.get(i).imageUri);
+            dogPicRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // Successfully downloaded data to local file
+                            // ...
+                            try {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.fromFile(localFile));
+                                viewHolder.imageView.setImageBitmap(bitmap);
+                            } catch (IOException exc) {
+
+                            }
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle failed download
-                        // ...
-                    }
-                });
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+                }
+            });
+        } catch (IOException exc) {
+
+        }
+
+
 
     }
 
